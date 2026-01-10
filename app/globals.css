@@ -804,6 +804,204 @@ a:hover {
 }
 
 /* ============================================
+   NAVIGATION HUD
+   ============================================ */
+.nav-hud {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(180deg, var(--bg-deep) 0%, transparent 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  animation: fadeSlideDown 0.6s var(--ease-out-expo) forwards;
+  animation-delay: 0.15s; /* After scan line reveals header */
+}
+
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nav-hud__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* Identity / Logo */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.identity:hover {
+  text-decoration: none;
+}
+
+.identity:hover .identity__icon {
+  color: var(--jarvis-cyan-bright);
+  filter: drop-shadow(var(--glow-sm));
+}
+
+.identity__icon {
+  width: 44px;
+  height: 44px;
+  color: var(--jarvis-cyan);
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.identity__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.identity__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.identity__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--jarvis-cyan);
+  opacity: 0.8;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--jarvis-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--jarvis-cyan);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-dot--amber {
+  background: var(--jarvis-amber);
+  box-shadow: 0 0 8px var(--jarvis-amber);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Navigation Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: all 0.3s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--jarvis-cyan);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  text-decoration: none;
+  border-color: var(--border-subtle);
+  background: var(--bg-glass);
+}
+
+.nav-link:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-link__index {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--jarvis-cyan);
+  opacity: 0.6;
+}
+
+.nav-link:hover .nav-link__index {
+  opacity: 1;
+}
+
+/* Navigation responsive styles */
+@media (max-width: 768px) {
+  .nav-hud {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .nav-hud__inner {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .identity__text {
+    display: none;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-link {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8rem;
+  }
+
+  .nav-link__index {
+    display: none;
+  }
+}
+
+/* ============================================
    RESPONSIVE BREAKPOINTS REFERENCE
    sm: 640px
    md: 768px

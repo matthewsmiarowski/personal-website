@@ -8,45 +8,6 @@ export default function Home() {
       {/* Decorative grid overlay */}
       <div className="hex-grid" aria-hidden="true" />
       
-      {/* Navigation HUD */}
-      <header className="nav-hud">
-        <div className="nav-hud__inner">
-          {/* Logo / Identity */}
-          <Link href="/" className="identity">
-            <div className="identity__icon">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="currentColor" strokeWidth="1.5"/>
-                <path d="M20 12L28 16V24L20 28L12 24V16L20 12Z" fill="currentColor" opacity="0.3"/>
-                <circle cx="20" cy="20" r="3" fill="currentColor"/>
-              </svg>
-            </div>
-            <div className="identity__text">
-              <span className="identity__name">Matt Smiarowski</span>
-              <span className="identity__status">
-                <span className="status-dot" />
-                System Online
-              </span>
-            </div>
-          </Link>
-
-          {/* Navigation Links */}
-          <nav className="nav-links">
-            <Link href="/work" className="nav-link">
-              <span className="nav-link__index">01</span>
-              <span className="nav-link__text">Work</span>
-            </Link>
-            <Link href="/projects" className="nav-link">
-              <span className="nav-link__index">02</span>
-              <span className="nav-link__text">Projects</span>
-            </Link>
-            <Link href="/interests" className="nav-link">
-              <span className="nav-link__index">03</span>
-              <span className="nav-link__text">Interests</span>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
       {/* Main Content Area */}
       <div className="workshop__content">
         {/* Hero Section */}
