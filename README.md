@@ -123,6 +123,9 @@ personal-website/
 │   ├── page.tsx           # Home page
 │   ├── globals.css        # Global styles
 │   ├── home.css           # Home page styles
+│   ├── components/        # React components
+│   │   ├── HudClock.tsx    # Clock component
+│   │   └── Navigation.tsx  # Navigation component
 │   ├── thoughts/          # Thoughts page
 │   │   └── page.tsx
 │   ├── projects/          # Projects page

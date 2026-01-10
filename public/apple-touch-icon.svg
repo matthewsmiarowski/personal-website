@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <defs>
+    <!-- Cyan glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Gradient for the M -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#5ce1ff"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Dark background -->
+  <rect width="180" height="180" rx="22" fill="#0a1419"/>
+  
+  <!-- Hexagonal tech frame -->
+  <path d="M90 18 L152 53 L152 127 L90 162 L28 127 L28 53 Z" 
+        fill="none" 
+        stroke="#00d4ff" 
+        stroke-width="2" 
+        opacity="0.4"/>
+  
+  <!-- Inner frame accent -->
+  <path d="M90 35 L135 60 L135 120 L90 145 L45 120 L45 60 Z" 
+        fill="rgba(0,212,255,0.08)" 
+        stroke="#00d4ff" 
+        stroke-width="1.5" 
+        opacity="0.6"/>
+  
+  <!-- Stylized "M" letterform -->
+  <g filter="url(#glow)">
+    <path d="M55 125 L55 62 L90 97 L125 62 L125 125" 
+          fill="none" 
+          stroke="url(#cyanGrad)" 
+          stroke-width="14" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Corner tech accents -->
+  <path d="M15 45 L15 15 L45 15" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.8"/>
+  <path d="M165 45 L165 15 L135 15" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.8"/>
+  <path d="M15 135 L15 165 L45 165" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.8"/>
+  <path d="M165 135 L165 165 L135 165" fill="none" stroke="#00d4ff" stroke-width="4" opacity="0.8"/>
+  
+  <!-- Status dot -->
+  <circle cx="150" cy="30" r="8" fill="#00d4ff" opacity="0.9"/>
+</svg>
