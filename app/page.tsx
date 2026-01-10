@@ -28,9 +28,44 @@ export default function Home() {
                   <div className="hud-readout__bar-fill" style={{ width: '98.7%' }} />
                 </div>
               </div>
-              <div className="hud-readout">
-                <div className="hud-readout__label">BUILD.VER</div>
-                <div className="hud-readout__value">2026.1</div>
+              <div className="hud-social hud-social--left">
+                <div className="hud-social__label">TECH.STACK</div>
+                <div className="hud-social__links">
+                  <a 
+                    href="https://cursor.sh" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hud-social__link"
+                    aria-label="Cursor"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      <path d="M12.58 12.58L19.97 10.07" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://gemini.google.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hud-social__link"
+                    aria-label="Google Gemini"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2L14.09 8.26L20 10L14.09 11.74L12 18L9.91 11.74L4 10L9.91 8.26L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://vercel.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hud-social__link"
+                    aria-label="Vercel"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2L2 22H22L12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </aside>
 
