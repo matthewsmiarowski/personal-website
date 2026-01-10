@@ -4,7 +4,7 @@ import Navigation from './components/Navigation'
 
 export const metadata: Metadata = {
   title: 'Matt Smiarowski - Personal Website',
-  description: 'Personal website showcasing my work, projects, and interests',
+  description: 'Personal website showcasing my thoughts, projects, and interests',
 }
 
 export const viewport: Viewport = {

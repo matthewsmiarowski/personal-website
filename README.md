@@ -1,6 +1,6 @@
 # Personal Website
 
-Matt Smiarowski's personal website showcasing work, projects, and interests.
+Matt Smiarowski's personal website showcasing thoughts, projects, and interests.
 
 Built with [Next.js](https://nextjs.org/), [TypeScript](https://www.typescriptlang.org/), and deployed on [Vercel](https://vercel.com/).
 
@@ -29,7 +29,7 @@ Built with [Next.js](https://nextjs.org/), [TypeScript](https://www.typescriptla
 
 4. **Start editing:**
    - The home page is at `app/page.tsx`
-   - Work page: `app/work/page.tsx`
+   - Thoughts page: `app/thoughts/page.tsx`
    - Projects page: `app/projects/page.tsx`
    - Interests page: `app/interests/page.tsx`
    - Global styles: `app/globals.css`
@@ -123,7 +123,7 @@ personal-website/
 │   ├── page.tsx           # Home page
 │   ├── globals.css        # Global styles
 │   ├── home.css           # Home page styles
-│   ├── work/              # Work page
+│   ├── thoughts/          # Thoughts page
 │   │   └── page.tsx
 │   ├── projects/          # Projects page
 │   │   └── page.tsx
@@ -157,7 +157,7 @@ export const metadata: Metadata = {
 
 ## Next Steps
 
-- Add your work experience to `app/work/page.tsx`
+- Add your thoughts and blog posts to `app/thoughts/page.tsx`
 - Showcase your projects in `app/projects/page.tsx`
 - Share your interests in `app/interests/page.tsx`
 - Customize the design and styling

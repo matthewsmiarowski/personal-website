@@ -51,18 +51,6 @@ export default function Home() {
               <p className="hero__subtitle">
                 Engineer • Builder • Innovator
               </p>
-
-              <div className="hero__cta">
-                <Link href="/projects" className="btn-holo">
-                  <span>Explore Projects</span>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Link>
-                <Link href="/work" className="btn-holo amber">
-                  <span>View Experience</span>
-                </Link>
-              </div>
             </div>
 
             {/* Right decorative HUD elements */}
@@ -83,7 +71,7 @@ export default function Home() {
         {/* Feature Panels */}
         <section className="panels">
           <div className="panels__container">
-            <Link href="/work" className="panel">
+            <Link href="/thoughts" className="panel">
               <div className="panel__header">
                 <span className="panel__number">01</span>
                 <span className="panel__status">
@@ -93,19 +81,24 @@ export default function Home() {
               </div>
               <div className="panel__icon">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-                  <path d="M6 18H42" stroke="currentColor" strokeWidth="1.5"/>
-                  <circle cx="12" cy="14" r="2" fill="currentColor" opacity="0.5"/>
-                  <circle cx="18" cy="14" r="2" fill="currentColor" opacity="0.5"/>
-                  <path d="M14 26L18 30L26 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 8L24 12V40L12 36V8Z" stroke="currentColor" strokeWidth="1.5"/>
+                  <path d="M36 8L24 12V40L36 36V8Z" stroke="currentColor" strokeWidth="1.5"/>
+                  <path d="M24 12L12 8L12 36L24 40V12Z" fill="currentColor" opacity="0.15"/>
+                  <path d="M24 12L36 8L36 36L24 40V12Z" fill="currentColor" opacity="0.15"/>
+                  <line x1="12" y1="8" x2="12" y2="36" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="36" y1="8" x2="36" y2="36" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="18" y1="18" x2="22" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                  <line x1="18" y1="22" x2="22" y2="22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                  <line x1="26" y1="18" x2="30" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
+                  <line x1="26" y1="22" x2="30" y2="22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
                 </svg>
               </div>
-              <h3 className="panel__title">Work Experience</h3>
+              <h3 className="panel__title">Thoughts</h3>
               <p className="panel__description">
-                Professional journey through technology and innovation
+                Blog posts and interesting social media links
               </p>
               <div className="panel__footer">
-                <span className="panel__action">Access Records</span>
+                <span className="panel__action">Read More</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>

@@ -20,12 +20,13 @@
    HERO SECTION
    ============================================ */
 .hero {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--space-xl) var(--space-lg);
-  min-height: 70vh;
+  padding-bottom: var(--space-lg);
+  min-height: auto;
 }
 
 .hero__container {
@@ -244,19 +245,14 @@
   color: var(--text-secondary);
 }
 
-/* Hero CTA Buttons */
-.hero__cta {
-  display: flex;
-  gap: var(--space-md);
-  margin-top: var(--space-md);
-}
 
 /* ============================================
    FEATURE PANELS SECTION
    ============================================ */
 .panels {
-  padding: var(--space-xl) var(--space-lg);
+  padding: var(--space-lg) var(--space-lg);
   padding-bottom: var(--space-2xl);
+  padding-top: 0;
 }
 
 .panels__container {
@@ -545,7 +541,8 @@
 @media (max-width: 768px) {
   .hero {
     padding: var(--space-lg) var(--space-md);
-    min-height: 60vh;
+    padding-bottom: var(--space-md);
+    min-height: auto;
   }
 
   .hero__greeting {
@@ -555,17 +552,6 @@
   .hero__subtitle {
     font-size: 1rem;
     letter-spacing: 0.15em;
-  }
-
-  .hero__cta {
-    flex-direction: column;
-    width: 100%;
-    max-width: 280px;
-  }
-
-  .btn-holo {
-    width: 100%;
-    justify-content: center;
   }
 
   .panels {

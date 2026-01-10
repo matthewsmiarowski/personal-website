@@ -24,9 +24,9 @@ export default function Navigation() {
 
         {/* Navigation Links */}
         <nav className="nav-links">
-          <Link href="/work" className="nav-link">
+          <Link href="/thoughts" className="nav-link">
             <span className="nav-link__index">01</span>
-            <span className="nav-link__text">Work</span>
+            <span className="nav-link__text">Thoughts</span>
           </Link>
           <Link href="/projects" className="nav-link">
             <span className="nav-link__index">02</span>
