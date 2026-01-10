@@ -1,9 +1,13 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Matt Smiarowski - Personal Website',
   description: 'Personal website showcasing my work, projects, and interests',
+}
+
+export const viewport: Viewport = {
+  themeColor: '#00d4ff',
 }
 
 export default function RootLayout({
@@ -13,7 +17,21 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <head>
+        {/* Preconnect for faster font loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body>
+        {/* Ambient light effects in corners */}
+        <div className="ambient-lights" aria-hidden="true">
+          <div className="ambient-light ambient-light--cyan" />
+          <div className="ambient-light ambient-light--amber" />
+        </div>
+        
+        {/* Main content */}
+        {children}
+      </body>
     </html>
   )
 }
