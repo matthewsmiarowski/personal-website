@@ -121,14 +121,14 @@ body::before {
   z-index: -1;
 }
 
-/* Animated scan line effect */
+/* Animated scan line effect - runs once on page load */
 body::after {
   content: '';
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 1px;
   background: linear-gradient(90deg, 
     transparent 0%, 
     var(--jarvis-cyan-ghost) 20%,
@@ -136,17 +136,82 @@ body::after {
     var(--jarvis-cyan-ghost) 80%,
     transparent 100%
   );
-  opacity: 0.6;
-  animation: scanLine 8s linear infinite;
+  opacity: 0;
+  animation: scanLineReveal 2.5s ease-out forwards;
   pointer-events: none;
   z-index: 9999;
 }
 
-@keyframes scanLine {
-  0% { top: -2px; opacity: 0; }
-  5% { opacity: 0.6; }
-  95% { opacity: 0.6; }
-  100% { top: 100vh; opacity: 0; }
+@keyframes scanLineReveal {
+  0% { 
+    top: -1px; 
+    opacity: 0; 
+  }
+  3% { 
+    opacity: 0.6; 
+  }
+  97% { 
+    opacity: 0.6; 
+  }
+  100% { 
+    top: 100vh; 
+    opacity: 0; 
+  }
+}
+
+/* ============================================
+   PAGE REVEAL SYSTEM
+   Content reveals as scan line passes
+   ============================================ */
+.scan-reveal-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* The reveal mask that follows the scan line */
+.scan-reveal-mask {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-void);
+  pointer-events: none;
+  z-index: 9998;
+  animation: revealMask 2.5s ease-out forwards;
+}
+
+@keyframes revealMask {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+/* Glow effect trailing the scan line */
+.scan-reveal-mask::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 212, 255, 0.15) 40%,
+    rgba(0, 212, 255, 0.3) 100%
+  );
+  animation: glowTrail 2.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes glowTrail {
+  0% {
+    transform: translateY(-80px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
 }
 
 /* ============================================

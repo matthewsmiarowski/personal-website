@@ -26,13 +26,15 @@
   background: linear-gradient(180deg, var(--bg-deep) 0%, transparent 100%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: fadeSlideDown 0.8s var(--ease-out-expo) forwards;
+  opacity: 0;
+  animation: fadeSlideDown 0.6s var(--ease-out-expo) forwards;
+  animation-delay: 0.15s; /* After scan line reveals header */
 }
 
 @keyframes fadeSlideDown {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
@@ -208,15 +210,15 @@
   flex-direction: column;
   gap: var(--space-lg);
   opacity: 0;
-  animation: materializeHud 1s var(--ease-out-expo) forwards;
+  animation: materializeHud 0.8s var(--ease-out-expo) forwards;
 }
 
 .hero__hud--left {
-  animation-delay: 0.4s;
+  animation-delay: 0.9s; /* After scan line reveals hero area */
 }
 
 .hero__hud--right {
-  animation-delay: 0.6s;
+  animation-delay: 1s;
   align-items: flex-end;
   text-align: right;
 }
@@ -285,8 +287,8 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, var(--jarvis-cyan), var(--jarvis-cyan-bright));
-  animation: barFill 1.5s var(--ease-out-expo) forwards;
-  animation-delay: 0.8s;
+  animation: barFill 1.2s var(--ease-out-expo) forwards;
+  animation-delay: 1.3s; /* After HUD panels materialize */
   transform-origin: left;
   transform: scaleX(0);
 }
@@ -335,8 +337,8 @@
   text-align: center;
   gap: var(--space-lg);
   opacity: 0;
-  animation: materializeMain 1s var(--ease-out-expo) forwards;
-  animation-delay: 0.2s;
+  animation: materializeMain 0.8s var(--ease-out-expo) forwards;
+  animation-delay: 0.7s; /* After scan line reveals center */
 }
 
 @keyframes materializeMain {
@@ -450,9 +452,9 @@
   animation: panelMaterialize 0.8s var(--ease-out-expo) forwards;
 }
 
-.panel:nth-child(1) { animation-delay: 0.5s; }
-.panel:nth-child(2) { animation-delay: 0.6s; }
-.panel:nth-child(3) { animation-delay: 0.7s; }
+.panel:nth-child(1) { animation-delay: 1.6s; } /* After scan line reaches panels */
+.panel:nth-child(2) { animation-delay: 1.75s; }
+.panel:nth-child(3) { animation-delay: 1.9s; }
 
 @keyframes panelMaterialize {
   from {

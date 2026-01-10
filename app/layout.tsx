@@ -29,6 +29,9 @@ export default function RootLayout({
           <div className="ambient-light ambient-light--amber" />
         </div>
         
+        {/* Scan line reveal mask - covers content until scan line passes */}
+        <div className="scan-reveal-mask" aria-hidden="true" />
+        
         {/* Main content */}
         {children}
       </body>
