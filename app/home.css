@@ -147,8 +147,15 @@
   text-shadow: var(--glow-sm);
 }
 
-/* HUD Coordinates */
-.hud-coords__label {
+/* HUD Social Links */
+.hud-social {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  align-items: flex-end;
+}
+
+.hud-social__label {
   font-family: var(--font-mono);
   font-size: 0.65rem;
   letter-spacing: 0.15em;
@@ -157,10 +164,59 @@
   margin-bottom: 4px;
 }
 
-.hud-coords__value {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.hud-social__links {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.hud-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--jarvis-cyan);
+  opacity: 0.7;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  transition: all 0.3s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-social__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--jarvis-cyan-ghost);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+.hud-social__link:hover {
+  opacity: 1;
+  border-color: var(--border-glow);
+  color: var(--jarvis-cyan-bright);
+  box-shadow: var(--glow-sm);
+  transform: translateY(-2px);
+}
+
+.hud-social__link:hover::before {
+  opacity: 1;
+}
+
+.hud-social__link svg {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.hud-social__link:hover svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 8px currentColor);
 }
 
 /* Hero Main Content */

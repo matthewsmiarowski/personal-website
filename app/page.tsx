@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import HudClock from './components/HudClock'
 import './home.css'
 
 export default function Home() {
@@ -55,14 +54,34 @@ export default function Home() {
 
             {/* Right decorative HUD elements */}
             <aside className="hero__hud hero__hud--right" aria-hidden="true">
-              <div className="hud-clock">
-                <div className="hud-clock__label">LOCAL.TIME</div>
-                <HudClock />
-              </div>
-              <div className="hud-coords">
-                <div className="hud-coords__label">COORDINATES</div>
-                <div className="hud-coords__value">41.8781° N</div>
-                <div className="hud-coords__value">87.6298° W</div>
+              <div className="hud-social">
+                <div className="hud-social__label">SOCIAL</div>
+                <div className="hud-social__links">
+                  <a 
+                    href="https://x.com/mattsmiarowski" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hud-social__link"
+                    aria-label="Visit my X profile"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://www.linkedin.com/in/matthew-smiarowski/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hud-social__link"
+                    aria-label="Visit my LinkedIn profile"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      <rect x="2" y="9" width="4" height="12" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                      <circle cx="4" cy="4" r="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                    </svg>
+                  </a>
+                </div>
               </div>
             </aside>
           </div>
