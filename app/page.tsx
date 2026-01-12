@@ -77,7 +77,7 @@ export default function Home() {
               </h1>
 
               <p className="hero__subtitle">
-                curiosity starts beyond the vibes
+                great things get built beyond the vibes
               </p>
             </div>
 
