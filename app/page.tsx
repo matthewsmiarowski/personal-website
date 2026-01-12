@@ -71,15 +71,9 @@ export default function Home() {
 
             {/* Center - Main Title */}
             <div className="hero__main">
-              <div className="hero__greeting">
-                <span className="hero__greeting-line" />
-                <span className="hero__greeting-text">Welcome, User</span>
-                <span className="hero__greeting-line" />
-              </div>
-              
               <h1 className="hero__title">
-                <span className="hero__title-line">Building the</span>
-                <span className="hero__title-line hero__title-line--highlight">Future</span>
+                <span className="hero__title-line">Time to</span>
+                <span className="hero__title-line hero__title-line--highlight">Build</span>
               </h1>
 
               <p className="hero__subtitle">
@@ -128,10 +122,6 @@ export default function Home() {
             <Link href="/thoughts" className="panel">
               <div className="panel__header">
                 <span className="panel__number">01</span>
-                <span className="panel__status">
-                  <span className="status-dot" />
-                  Active
-                </span>
               </div>
               <div className="panel__icon">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -162,10 +152,6 @@ export default function Home() {
             <Link href="/projects" className="panel panel--featured">
               <div className="panel__header">
                 <span className="panel__number">02</span>
-                <span className="panel__status panel__status--highlight">
-                  <span className="status-dot status-dot--amber" />
-                  Featured
-                </span>
               </div>
               <div className="panel__icon">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -189,10 +175,6 @@ export default function Home() {
             <Link href="/interests" className="panel">
               <div className="panel__header">
                 <span className="panel__number">03</span>
-                <span className="panel__status">
-                  <span className="status-dot" />
-                  Active
-                </span>
               </div>
               <div className="panel__icon">
                 <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
