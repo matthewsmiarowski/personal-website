@@ -211,7 +211,6 @@ export default function Home() {
               <span className="footer-hud__divider" />
             </div>
             <div className="footer-hud__right">
-              <span className="footer-hud__text">v2026.1.0</span>
             </div>
           </div>
         </footer>
