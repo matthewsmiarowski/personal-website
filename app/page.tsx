@@ -77,7 +77,7 @@ export default function Home() {
               </h1>
 
               <p className="hero__subtitle">
-                Engineer • Builder • Innovator
+                curiosity starts beyond the vibes
               </p>
             </div>
 
