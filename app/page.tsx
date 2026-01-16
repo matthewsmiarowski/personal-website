@@ -14,20 +14,6 @@ export default function Home() {
           <div className="hero__container">
             {/* Left decorative HUD elements */}
             <aside className="hero__hud hero__hud--left" aria-hidden="true">
-              <div className="hud-readout">
-                <div className="hud-readout__label">SYS.STATUS</div>
-                <div className="hud-readout__value">ACTIVE</div>
-                <div className="hud-readout__bar">
-                  <div className="hud-readout__bar-fill" />
-                </div>
-              </div>
-              <div className="hud-readout">
-                <div className="hud-readout__label">NEURAL.NET</div>
-                <div className="hud-readout__value">98.7%</div>
-                <div className="hud-readout__bar">
-                  <div className="hud-readout__bar-fill" style={{ width: '98.7%' }} />
-                </div>
-              </div>
               <div className="hud-social hud-social--left">
                 <div className="hud-social__label">TECH.STACK</div>
                 <div className="hud-social__links">
