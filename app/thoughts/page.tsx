@@ -6,38 +6,9 @@ import '../globals.css'
 import './thoughts.css'
 import { useGodMode } from '../context/GodModeContext'
 import ContentFormModal from '../components/ContentFormModal'
+import SocialPostFormModal from '../components/SocialPostFormModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
-import { WrittenContentDB } from '@/lib/supabase'
-
-// ============================================
-// TYPE DEFINITIONS
-// ============================================
-
-interface SocialMediaPost {
-  id: string
-  link: string
-  thoughts: string
-  dateAdded: Date
-}
-
-// ============================================
-// STATIC SOCIAL MEDIA POSTS
-// (These remain static for now - can be migrated to Supabase later)
-// ============================================
-
-const socialMediaPosts: SocialMediaPost[] = [
-  // Add social media posts here in the following format:
-  // {
-  //   id: 'unique-id',
-  //   link: 'https://x.com/username/status/123456',
-  //   thoughts: 'My thoughts on this post...',
-  //   dateAdded: new Date('2026-01-15'),
-  // },
-]
-
-const sortedSocialMediaPosts = [...socialMediaPosts].sort(
-  (a, b) => b.dateAdded.getTime() - a.dateAdded.getTime()
-)
+import { WrittenContentDB, SocialMediaPostDB } from '@/lib/supabase'
 
 // ============================================
 // HELPER COMPONENTS
@@ -143,11 +114,43 @@ function WrittenContentCard({ content, isGodMode, onEdit, onDelete }: WrittenCon
   )
 }
 
-function SocialMediaPostCard({ post }: { post: SocialMediaPost }) {
+interface SocialMediaPostCardProps {
+  post: SocialMediaPostDB
+  isGodMode: boolean
+  onEdit: (post: SocialMediaPostDB) => void
+  onDelete: (post: SocialMediaPostDB) => void
+}
+
+function SocialMediaPostCard({ post, isGodMode, onEdit, onDelete }: SocialMediaPostCardProps) {
   return (
     <article className="content-card content-card--social">
+      {/* God Mode Actions */}
+      {isGodMode && (
+        <div className="content-card__actions content-card__actions--social">
+          <button 
+            className="content-card__action-btn content-card__action-btn--edit-amber"
+            onClick={() => onEdit(post)}
+            aria-label="Edit post"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button 
+            className="content-card__action-btn content-card__action-btn--delete"
+            onClick={() => onDelete(post)}
+            aria-label="Delete post"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      )}
+
       <div className="content-card__header">
-        <DateTag date={post.dateAdded} />
+        <DateTag date={post.date_added} />
         <div className="content-card__social-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -217,17 +220,29 @@ function LoadingState() {
 
 export default function Thoughts() {
   const { isGodMode } = useGodMode()
-  const [writtenContent, setWrittenContent] = useState<WrittenContentDB[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   
-  // Modal states
-  const [showAddModal, setShowAddModal] = useState(false)
+  // Written content state
+  const [writtenContent, setWrittenContent] = useState<WrittenContentDB[]>([])
+  const [isLoadingWritten, setIsLoadingWritten] = useState(true)
+  const [errorWritten, setErrorWritten] = useState<string | null>(null)
+  
+  // Social posts state
+  const [socialPosts, setSocialPosts] = useState<SocialMediaPostDB[]>([])
+  const [isLoadingSocial, setIsLoadingSocial] = useState(true)
+  const [errorSocial, setErrorSocial] = useState<string | null>(null)
+  
+  // Written content modal states
+  const [showAddContentModal, setShowAddContentModal] = useState(false)
   const [editContent, setEditContent] = useState<WrittenContentDB | null>(null)
   const [deleteContent, setDeleteContent] = useState<WrittenContentDB | null>(null)
+  
+  // Social post modal states
+  const [showAddSocialModal, setShowAddSocialModal] = useState(false)
+  const [editSocialPost, setEditSocialPost] = useState<SocialMediaPostDB | null>(null)
+  const [deleteSocialPost, setDeleteSocialPost] = useState<SocialMediaPostDB | null>(null)
 
-  // Fetch content from API
-  const fetchContent = async () => {
+  // Fetch written content from API
+  const fetchWrittenContent = async () => {
     try {
       const response = await fetch('/api/content')
       if (!response.ok) {
@@ -235,31 +250,48 @@ export default function Thoughts() {
       }
       const data = await response.json()
       setWrittenContent(data)
-      setError(null)
+      setErrorWritten(null)
     } catch (err) {
       console.error('Error fetching content:', err)
-      setError('Failed to load content')
+      setErrorWritten('Failed to load content')
     } finally {
-      setIsLoading(false)
+      setIsLoadingWritten(false)
+    }
+  }
+
+  // Fetch social posts from API
+  const fetchSocialPosts = async () => {
+    try {
+      const response = await fetch('/api/social-posts')
+      if (!response.ok) {
+        throw new Error('Failed to fetch social posts')
+      }
+      const data = await response.json()
+      setSocialPosts(data)
+      setErrorSocial(null)
+    } catch (err) {
+      console.error('Error fetching social posts:', err)
+      setErrorSocial('Failed to load social posts')
+    } finally {
+      setIsLoadingSocial(false)
     }
   }
 
   useEffect(() => {
-    fetchContent()
+    fetchWrittenContent()
+    fetchSocialPosts()
   }, [])
 
-  // Handle edit
-  const handleEdit = (content: WrittenContentDB) => {
+  // Written content handlers
+  const handleEditContent = (content: WrittenContentDB) => {
     setEditContent(content)
   }
 
-  // Handle delete
-  const handleDelete = (content: WrittenContentDB) => {
+  const handleDeleteContent = (content: WrittenContentDB) => {
     setDeleteContent(content)
   }
 
-  // Confirm delete
-  const confirmDelete = async (passphrase: string): Promise<boolean> => {
+  const confirmDeleteContent = async (passphrase: string): Promise<boolean> => {
     if (!deleteContent) return false
 
     try {
@@ -273,15 +305,13 @@ export default function Thoughts() {
       })
 
       if (!response.ok) {
-        const data = await response.json()
         if (response.status === 401) {
           return false // Wrong passphrase
         }
-        throw new Error(data.error || 'Failed to delete')
+        throw new Error('Failed to delete')
       }
 
-      // Refresh content
-      await fetchContent()
+      await fetchWrittenContent()
       return true
     } catch (err) {
       console.error('Delete error:', err)
@@ -289,9 +319,41 @@ export default function Thoughts() {
     }
   }
 
-  // Handle successful add/edit
-  const handleSuccess = () => {
-    fetchContent()
+  // Social post handlers
+  const handleEditSocialPost = (post: SocialMediaPostDB) => {
+    setEditSocialPost(post)
+  }
+
+  const handleDeleteSocialPost = (post: SocialMediaPostDB) => {
+    setDeleteSocialPost(post)
+  }
+
+  const confirmDeleteSocialPost = async (passphrase: string): Promise<boolean> => {
+    if (!deleteSocialPost) return false
+
+    try {
+      const response = await fetch('/api/social-posts', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          passphrase,
+          id: deleteSocialPost.id,
+        }),
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          return false // Wrong passphrase
+        }
+        throw new Error('Failed to delete')
+      }
+
+      await fetchSocialPosts()
+      return true
+    } catch (err) {
+      console.error('Delete error:', err)
+      throw err
+    }
   }
 
   return (
@@ -330,7 +392,7 @@ export default function Thoughts() {
             {isGodMode && (
               <button 
                 className="add-content-btn"
-                onClick={() => setShowAddModal(true)}
+                onClick={() => setShowAddContentModal(true)}
               >
                 <span className="add-content-btn__icon">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -342,12 +404,12 @@ export default function Thoughts() {
             )}
             
             <div className="content-list">
-              {isLoading ? (
+              {isLoadingWritten ? (
                 <LoadingState />
-              ) : error ? (
+              ) : errorWritten ? (
                 <div className="error-state">
-                  <p>{error}</p>
-                  <button onClick={fetchContent}>Retry</button>
+                  <p>{errorWritten}</p>
+                  <button onClick={fetchWrittenContent}>Retry</button>
                 </div>
               ) : writtenContent.length > 0 ? (
                 writtenContent.map((content) => (
@@ -355,8 +417,8 @@ export default function Thoughts() {
                     key={content.id} 
                     content={content}
                     isGodMode={isGodMode}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
+                    onEdit={handleEditContent}
+                    onDelete={handleDeleteContent}
                   />
                 ))
               ) : (
@@ -375,13 +437,41 @@ export default function Thoughts() {
                 </svg>
               </div>
               <h2 className="column-header__title">Social Feed</h2>
-              <span className="column-header__count">{sortedSocialMediaPosts.length}</span>
+              <span className="column-header__count">{socialPosts.length}</span>
             </div>
+
+            {/* God Mode: Add Social Post Button */}
+            {isGodMode && (
+              <button 
+                className="add-content-btn add-content-btn--amber"
+                onClick={() => setShowAddSocialModal(true)}
+              >
+                <span className="add-content-btn__icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </span>
+                <span>Add Post</span>
+              </button>
+            )}
             
             <div className="content-list">
-              {sortedSocialMediaPosts.length > 0 ? (
-                sortedSocialMediaPosts.map((post) => (
-                  <SocialMediaPostCard key={post.id} post={post} />
+              {isLoadingSocial ? (
+                <LoadingState />
+              ) : errorSocial ? (
+                <div className="error-state">
+                  <p>{errorSocial}</p>
+                  <button onClick={fetchSocialPosts}>Retry</button>
+                </div>
+              ) : socialPosts.length > 0 ? (
+                socialPosts.map((post) => (
+                  <SocialMediaPostCard 
+                    key={post.id} 
+                    post={post}
+                    isGodMode={isGodMode}
+                    onEdit={handleEditSocialPost}
+                    onDelete={handleDeleteSocialPost}
+                  />
                 ))
               ) : (
                 <EmptyState type="social" />
@@ -391,22 +481,40 @@ export default function Thoughts() {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* Written Content Modals */}
       <ContentFormModal
-        isOpen={showAddModal || !!editContent}
+        isOpen={showAddContentModal || !!editContent}
         onClose={() => {
-          setShowAddModal(false)
+          setShowAddContentModal(false)
           setEditContent(null)
         }}
-        onSuccess={handleSuccess}
+        onSuccess={fetchWrittenContent}
         editContent={editContent}
       />
 
       <DeleteConfirmModal
         isOpen={!!deleteContent}
         onClose={() => setDeleteContent(null)}
-        onConfirm={confirmDelete}
+        onConfirm={confirmDeleteContent}
         title={deleteContent?.title || ''}
+      />
+
+      {/* Social Post Modals */}
+      <SocialPostFormModal
+        isOpen={showAddSocialModal || !!editSocialPost}
+        onClose={() => {
+          setShowAddSocialModal(false)
+          setEditSocialPost(null)
+        }}
+        onSuccess={fetchSocialPosts}
+        editPost={editSocialPost}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deleteSocialPost}
+        onClose={() => setDeleteSocialPost(null)}
+        onConfirm={confirmDeleteSocialPost}
+        title={`Social post from ${deleteSocialPost ? new Date(deleteSocialPost.date_added).toLocaleDateString() : ''}`}
       />
     </main>
   )

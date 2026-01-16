@@ -110,6 +110,11 @@
   border-top: none;
 }
 
+/* Amber corner variant */
+.modal-corner--amber {
+  border-color: var(--jarvis-amber);
+}
+
 /* ============================================
    HEADER
    ============================================ */
@@ -126,6 +131,10 @@
   width: 28px;
   height: 28px;
   color: var(--jarvis-cyan);
+}
+
+.modal-header__icon--amber {
+  color: var(--jarvis-amber);
 }
 
 .modal-header__icon svg {
@@ -208,6 +217,15 @@
   background: var(--jarvis-cyan);
   border-radius: 1px;
   opacity: 0.6;
+}
+
+/* Amber form label variants */
+.form-label--amber {
+  color: var(--jarvis-amber);
+}
+
+.form-label__indicator--amber {
+  background: var(--jarvis-amber);
 }
 
 .form-input,
@@ -365,6 +383,18 @@
   background: #ff5555;
   border-color: #ff5555;
   box-shadow: 0 0 20px rgba(255, 59, 59, 0.4);
+}
+
+.btn-modal--amber {
+  background: var(--jarvis-amber);
+  border-color: var(--jarvis-amber);
+  color: var(--bg-void);
+}
+
+.btn-modal--amber:hover {
+  background: var(--jarvis-amber-bright);
+  border-color: var(--jarvis-amber-bright);
+  box-shadow: var(--glow-amber);
 }
 
 .btn-modal:disabled {

@@ -23,3 +23,18 @@ export interface WrittenContentInput {
   image_url: string
   date_added: string
 }
+
+// Social Media Posts types
+export interface SocialMediaPostDB {
+  id: string
+  link: string
+  thoughts: string
+  date_added: string
+  created_at: string
+}
+
+export interface SocialMediaPostInput {
+  link: string
+  thoughts: string
+  date_added: string
+}

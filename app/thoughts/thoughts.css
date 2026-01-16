@@ -552,6 +552,39 @@
   box-shadow: 0 0 15px rgba(255, 59, 59, 0.4);
 }
 
+/* Amber edit button for social cards */
+.content-card__action-btn--edit-amber {
+  color: var(--jarvis-amber);
+}
+
+.content-card__action-btn--edit-amber:hover {
+  background: var(--jarvis-amber);
+  border-color: var(--jarvis-amber);
+  color: var(--bg-void);
+  box-shadow: var(--glow-amber);
+}
+
+/* Social card actions positioning */
+.content-card__actions--social {
+  top: auto;
+  bottom: var(--space-sm);
+}
+
+/* ============================================
+   GOD MODE: AMBER ADD BUTTON (Social Column)
+   ============================================ */
+.add-content-btn--amber {
+  color: var(--jarvis-amber);
+  background: var(--jarvis-amber-ghost);
+  border-color: var(--jarvis-amber-dim);
+}
+
+.add-content-btn--amber:hover {
+  background: rgba(255, 149, 0, 0.15);
+  border-color: var(--jarvis-amber);
+  box-shadow: var(--glow-amber);
+}
+
 /* ============================================
    LOADING STATE
    ============================================ */
