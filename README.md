@@ -1,6 +1,6 @@
 # Personal Website
 
-Matt Smiarowski's personal website showcasing thoughts, projects, and interests.
+Matt Smiarowski's personal website showcasing thoughts and projects.
 
 Built with [Next.js](https://nextjs.org/), [TypeScript](https://www.typescriptlang.org/), and deployed on [Vercel](https://vercel.com/).
 
@@ -31,7 +31,6 @@ Built with [Next.js](https://nextjs.org/), [TypeScript](https://www.typescriptla
    - The home page is at `app/page.tsx`
    - Thoughts page: `app/thoughts/page.tsx`
    - Projects page: `app/projects/page.tsx`
-   - Interests page: `app/interests/page.tsx`
    - Global styles: `app/globals.css`
 
 ### Build for Production
@@ -128,9 +127,7 @@ personal-website/
 │   │   └── Navigation.tsx  # Navigation component
 │   ├── thoughts/          # Thoughts page
 │   │   └── page.tsx
-│   ├── projects/          # Projects page
-│   │   └── page.tsx
-│   └── interests/         # Interests page
+│   └── projects/          # Projects page
 │       └── page.tsx
 ├── package.json           # Dependencies and scripts
 ├── tsconfig.json          # TypeScript configuration
@@ -162,7 +159,6 @@ export const metadata: Metadata = {
 
 - Add your thoughts and blog posts to `app/thoughts/page.tsx`
 - Showcase your projects in `app/projects/page.tsx`
-- Share your interests in `app/interests/page.tsx`
 - Customize the design and styling
 - Add a contact form or links to social media
 - Configure a custom domain in Vercel settings

@@ -32,10 +32,6 @@ export default function Navigation() {
             <span className="nav-link__index">02</span>
             <span className="nav-link__text">Projects</span>
           </Link>
-          <Link href="/interests" className="nav-link">
-            <span className="nav-link__index">03</span>
-            <span className="nav-link__text">Interests</span>
-          </Link>
         </nav>
       </div>
     </header>

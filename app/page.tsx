@@ -157,31 +157,6 @@ export default function Home() {
                 </svg>
               </div>
             </Link>
-
-            <Link href="/interests" className="panel">
-              <div className="panel__header">
-                <span className="panel__number">03</span>
-              </div>
-              <div className="panel__icon">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="24" cy="24" r="18" stroke="currentColor" strokeWidth="1.5"/>
-                  <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="1.5"/>
-                  <circle cx="24" cy="24" r="2" fill="currentColor"/>
-                  <path d="M24 6V10M24 38V42M6 24H10M38 24H42" stroke="currentColor" strokeWidth="1.5"/>
-                  <path d="M11.27 11.27L14.1 14.1M33.9 33.9L36.73 36.73M11.27 36.73L14.1 33.9M33.9 14.1L36.73 11.27" stroke="currentColor" strokeWidth="1.5" opacity="0.5"/>
-                </svg>
-              </div>
-              <h3 className="panel__title">Interests</h3>
-              <p className="panel__description">
-                Passions and pursuits beyond the code
-              </p>
-              <div className="panel__footer">
-                <span className="panel__action">Discover More</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </Link>
           </div>
         </section>
 

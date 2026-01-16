@@ -4,7 +4,7 @@ import Navigation from './components/Navigation'
 
 export const metadata: Metadata = {
   title: 'Matt Smiarowski - Personal Website',
-  description: 'Personal website showcasing my thoughts, projects, and interests',
+  description: 'Personal website showcasing my thoughts and projects',
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
