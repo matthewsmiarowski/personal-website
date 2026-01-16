@@ -124,9 +124,6 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="panel__title">Thoughts</h3>
-              <p className="panel__description">
-                Blog posts and interesting social media links
-              </p>
               <div className="panel__footer">
                 <span className="panel__action">Read More</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -147,9 +144,6 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="panel__title">Projects</h3>
-              <p className="panel__description">
-                Experimental builds and side ventures pushing boundaries
-              </p>
               <div className="panel__footer">
                 <span className="panel__action">View Schematics</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
