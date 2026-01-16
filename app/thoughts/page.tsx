@@ -1,20 +1,17 @@
-import Link from 'next/link'
+'use client'
+
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import '../globals.css'
 import './thoughts.css'
+import { useGodMode } from '../context/GodModeContext'
+import ContentFormModal from '../components/ContentFormModal'
+import DeleteConfirmModal from '../components/DeleteConfirmModal'
+import { WrittenContentDB } from '@/lib/supabase'
 
 // ============================================
 // TYPE DEFINITIONS
 // ============================================
-
-interface WrittenContent {
-  id: string
-  title: string
-  summary: string
-  link: string
-  image: string
-  dateAdded: Date
-}
 
 interface SocialMediaPost {
   id: string
@@ -24,21 +21,9 @@ interface SocialMediaPost {
 }
 
 // ============================================
-// CONTENT DATA
-// Content is manually added here and sorted by dateAdded (newest first)
+// STATIC SOCIAL MEDIA POSTS
+// (These remain static for now - can be migrated to Supabase later)
 // ============================================
-
-const writtenContent: WrittenContent[] = [
-  // Add written content here in the following format:
-  // {
-  //   id: 'unique-id',
-  //   title: 'Post Title',
-  //   summary: 'A short summary of the post...',
-  //   link: 'https://your-platform.com/post-link',
-  //   image: '/path-to-image.jpg',
-  //   dateAdded: new Date('2026-01-15'),
-  // },
-]
 
 const socialMediaPosts: SocialMediaPost[] = [
   // Add social media posts here in the following format:
@@ -50,11 +35,6 @@ const socialMediaPosts: SocialMediaPost[] = [
   // },
 ]
 
-// Sort content by dateAdded (newest first)
-const sortedWrittenContent = [...writtenContent].sort(
-  (a, b) => b.dateAdded.getTime() - a.dateAdded.getTime()
-)
-
 const sortedSocialMediaPosts = [...socialMediaPosts].sort(
   (a, b) => b.dateAdded.getTime() - a.dateAdded.getTime()
 )
@@ -63,8 +43,9 @@ const sortedSocialMediaPosts = [...socialMediaPosts].sort(
 // HELPER COMPONENTS
 // ============================================
 
-function DateTag({ date }: { date: Date }) {
-  const formatted = date.toLocaleDateString('en-US', {
+function DateTag({ date }: { date: Date | string }) {
+  const dateObj = typeof date === 'string' ? new Date(date) : date
+  const formatted = dateObj.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -85,13 +66,45 @@ function DateTag({ date }: { date: Date }) {
   )
 }
 
-function WrittenContentCard({ content }: { content: WrittenContent }) {
+interface WrittenContentCardProps {
+  content: WrittenContentDB
+  isGodMode: boolean
+  onEdit: (content: WrittenContentDB) => void
+  onDelete: (content: WrittenContentDB) => void
+}
+
+function WrittenContentCard({ content, isGodMode, onEdit, onDelete }: WrittenContentCardProps) {
   return (
     <article className="content-card content-card--written">
+      {/* God Mode Actions */}
+      {isGodMode && (
+        <div className="content-card__actions">
+          <button 
+            className="content-card__action-btn content-card__action-btn--edit"
+            onClick={() => onEdit(content)}
+            aria-label="Edit content"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <button 
+            className="content-card__action-btn content-card__action-btn--delete"
+            onClick={() => onDelete(content)}
+            aria-label="Delete content"
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      )}
+
       <div className="content-card__image-wrapper">
-        {content.image ? (
+        {content.image_url ? (
           <Image
-            src={content.image}
+            src={content.image_url}
             alt={content.title}
             fill
             className="content-card__image"
@@ -108,7 +121,7 @@ function WrittenContentCard({ content }: { content: WrittenContent }) {
       </div>
       
       <div className="content-card__body">
-        <DateTag date={content.dateAdded} />
+        <DateTag date={content.date_added} />
         
         <h3 className="content-card__title">{content.title}</h3>
         
@@ -189,11 +202,98 @@ function EmptyState({ type }: { type: 'written' | 'social' }) {
   )
 }
 
+function LoadingState() {
+  return (
+    <div className="loading-state">
+      <div className="loading-state__spinner" />
+      <p className="loading-state__text">Loading content...</p>
+    </div>
+  )
+}
+
 // ============================================
 // MAIN PAGE COMPONENT
 // ============================================
 
 export default function Thoughts() {
+  const { isGodMode } = useGodMode()
+  const [writtenContent, setWrittenContent] = useState<WrittenContentDB[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  
+  // Modal states
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [editContent, setEditContent] = useState<WrittenContentDB | null>(null)
+  const [deleteContent, setDeleteContent] = useState<WrittenContentDB | null>(null)
+
+  // Fetch content from API
+  const fetchContent = async () => {
+    try {
+      const response = await fetch('/api/content')
+      if (!response.ok) {
+        throw new Error('Failed to fetch content')
+      }
+      const data = await response.json()
+      setWrittenContent(data)
+      setError(null)
+    } catch (err) {
+      console.error('Error fetching content:', err)
+      setError('Failed to load content')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchContent()
+  }, [])
+
+  // Handle edit
+  const handleEdit = (content: WrittenContentDB) => {
+    setEditContent(content)
+  }
+
+  // Handle delete
+  const handleDelete = (content: WrittenContentDB) => {
+    setDeleteContent(content)
+  }
+
+  // Confirm delete
+  const confirmDelete = async (passphrase: string): Promise<boolean> => {
+    if (!deleteContent) return false
+
+    try {
+      const response = await fetch('/api/content', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          passphrase,
+          id: deleteContent.id,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        if (response.status === 401) {
+          return false // Wrong passphrase
+        }
+        throw new Error(data.error || 'Failed to delete')
+      }
+
+      // Refresh content
+      await fetchContent()
+      return true
+    } catch (err) {
+      console.error('Delete error:', err)
+      throw err
+    }
+  }
+
+  // Handle successful add/edit
+  const handleSuccess = () => {
+    fetchContent()
+  }
+
   return (
     <main className="thoughts-page">
       <div className="container">
@@ -223,13 +323,41 @@ export default function Thoughts() {
                 </svg>
               </div>
               <h2 className="column-header__title">Written Content</h2>
-              <span className="column-header__count">{sortedWrittenContent.length}</span>
+              <span className="column-header__count">{writtenContent.length}</span>
             </div>
+
+            {/* God Mode: Add Content Button */}
+            {isGodMode && (
+              <button 
+                className="add-content-btn"
+                onClick={() => setShowAddModal(true)}
+              >
+                <span className="add-content-btn__icon">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </span>
+                <span>Add Content</span>
+              </button>
+            )}
             
             <div className="content-list">
-              {sortedWrittenContent.length > 0 ? (
-                sortedWrittenContent.map((content) => (
-                  <WrittenContentCard key={content.id} content={content} />
+              {isLoading ? (
+                <LoadingState />
+              ) : error ? (
+                <div className="error-state">
+                  <p>{error}</p>
+                  <button onClick={fetchContent}>Retry</button>
+                </div>
+              ) : writtenContent.length > 0 ? (
+                writtenContent.map((content) => (
+                  <WrittenContentCard 
+                    key={content.id} 
+                    content={content}
+                    isGodMode={isGodMode}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
                 ))
               ) : (
                 <EmptyState type="written" />
@@ -262,6 +390,24 @@ export default function Thoughts() {
           </section>
         </div>
       </div>
+
+      {/* Modals */}
+      <ContentFormModal
+        isOpen={showAddModal || !!editContent}
+        onClose={() => {
+          setShowAddModal(false)
+          setEditContent(null)
+        }}
+        onSuccess={handleSuccess}
+        editContent={editContent}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deleteContent}
+        onClose={() => setDeleteContent(null)}
+        onConfirm={confirmDelete}
+        title={deleteContent?.title || ''}
+      />
     </main>
   )
 }

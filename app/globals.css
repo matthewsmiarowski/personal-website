@@ -1002,6 +1002,93 @@ a:hover {
 }
 
 /* ============================================
+   GOD MODE TOGGLE
+   ============================================ */
+.god-mode-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+  overflow: hidden;
+}
+
+.god-mode-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--jarvis-amber);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out-expo);
+}
+
+.god-mode-toggle:hover {
+  color: var(--jarvis-amber);
+  border-color: var(--jarvis-amber-dim);
+}
+
+.god-mode-toggle--active {
+  color: var(--bg-void);
+  border-color: var(--jarvis-amber);
+  box-shadow: var(--glow-amber);
+}
+
+.god-mode-toggle--active::before {
+  opacity: 1;
+}
+
+.god-mode-toggle__icon {
+  position: relative;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.god-mode-toggle__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.god-mode-toggle__text {
+  position: relative;
+  z-index: 1;
+}
+
+.god-mode-toggle--active .god-mode-toggle__icon,
+.god-mode-toggle--active .god-mode-toggle__text {
+  animation: godModePulse 2s ease-in-out infinite;
+}
+
+@keyframes godModePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@media (max-width: 768px) {
+  .god-mode-toggle {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .god-mode-toggle__text {
+    display: none;
+  }
+}
+
+/* ============================================
    RESPONSIVE BREAKPOINTS REFERENCE
    sm: 640px
    md: 768px

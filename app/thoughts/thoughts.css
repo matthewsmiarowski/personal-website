@@ -456,6 +456,179 @@
 }
 
 /* ============================================
+   GOD MODE: ADD CONTENT BUTTON
+   ============================================ */
+.add-content-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-md);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jarvis-cyan);
+  background: var(--jarvis-cyan-ghost);
+  border: 2px dashed var(--jarvis-cyan-dim);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.add-content-btn:hover {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--jarvis-cyan);
+  box-shadow: var(--glow-sm);
+}
+
+.add-content-btn__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.add-content-btn__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   GOD MODE: CARD ACTION BUTTONS
+   ============================================ */
+.content-card__actions {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  display: flex;
+  gap: var(--space-xs);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out-expo);
+}
+
+.content-card:hover .content-card__actions {
+  opacity: 1;
+}
+
+.content-card__action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.content-card__action-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.content-card__action-btn--edit {
+  color: var(--jarvis-cyan);
+}
+
+.content-card__action-btn--edit:hover {
+  background: var(--jarvis-cyan);
+  border-color: var(--jarvis-cyan);
+  color: var(--bg-void);
+  box-shadow: var(--glow-sm);
+}
+
+.content-card__action-btn--delete {
+  color: var(--jarvis-red);
+}
+
+.content-card__action-btn--delete:hover {
+  background: var(--jarvis-red);
+  border-color: var(--jarvis-red);
+  color: white;
+  box-shadow: 0 0 15px rgba(255, 59, 59, 0.4);
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl) var(--space-lg);
+  background: var(--bg-glass);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+}
+
+.loading-state__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-subtle);
+  border-top-color: var(--jarvis-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state__text {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+
+/* ============================================
+   ERROR STATE
+   ============================================ */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-2xl) var(--space-lg);
+  background: rgba(255, 59, 59, 0.05);
+  border: 1px solid rgba(255, 59, 59, 0.2);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.error-state p {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--jarvis-red);
+}
+
+.error-state button {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jarvis-cyan);
+  background: transparent;
+  border: 1px solid var(--jarvis-cyan);
+  border-radius: 2px;
+  padding: var(--space-sm) var(--space-lg);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-out-expo);
+}
+
+.error-state button:hover {
+  background: var(--jarvis-cyan);
+  color: var(--bg-void);
+}
+
+/* ============================================
    RESPONSIVE ADJUSTMENTS
    ============================================ */
 @media (max-width: 768px) {

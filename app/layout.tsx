@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import Navigation from './components/Navigation'
+import { Providers } from './components/Providers'
 
 export const metadata: Metadata = {
   title: 'Matt Smiarowski - Personal Website',
@@ -44,11 +45,13 @@ export default function RootLayout({
         {/* Scan line reveal mask - covers content until scan line passes */}
         <div className="scan-reveal-mask" aria-hidden="true" />
         
-        {/* Global Navigation */}
-        <Navigation />
-        
-        {/* Main content */}
-        {children}
+        <Providers>
+          {/* Global Navigation */}
+          <Navigation />
+          
+          {/* Main content */}
+          {children}
+        </Providers>
       </body>
     </html>
   )
