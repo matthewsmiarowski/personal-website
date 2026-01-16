@@ -54,9 +54,11 @@ export default function ContentFormModal({
   }, [isOpen, editContent])
 
   const handleImageUpload = async (file: File) => {
-    // Ask for passphrase first if not already entered
-    const uploadPassphrase = passphrase || prompt('Enter passphrase to upload image:')
-    if (!uploadPassphrase) return
+    // Check if passphrase is entered
+    if (!passphrase) {
+      setError('Please enter the passphrase below before uploading an image')
+      return
+    }
 
     setIsUploading(true)
     setError('')
@@ -64,7 +66,7 @@ export default function ContentFormModal({
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('passphrase', uploadPassphrase)
+      formData.append('passphrase', passphrase)
 
       const response = await fetch('/api/upload', {
         method: 'POST',
@@ -79,7 +81,6 @@ export default function ContentFormModal({
       }
 
       setImageUrl(data.url)
-      if (!passphrase) setPassphrase(uploadPassphrase)
     } catch (err) {
       setError('Failed to upload image')
       console.error('Upload error:', err)
@@ -280,6 +281,23 @@ export default function ContentFormModal({
             />
           </div>
 
+          {/* Passphrase - placed before image upload so user enters it first */}
+          <div className="form-group">
+            <label htmlFor="passphrase" className="form-label">
+              <span className="form-label__indicator" />
+              Passphrase
+            </label>
+            <input
+              type="password"
+              id="passphrase"
+              value={passphrase}
+              onChange={(e) => setPassphrase(e.target.value)}
+              className="form-input"
+              placeholder="Enter passphrase (required for image upload and save)..."
+              required
+            />
+          </div>
+
           {/* Image Upload */}
           <div className="form-group">
             <label className="form-label">
@@ -308,7 +326,7 @@ export default function ContentFormModal({
               </div>
             ) : (
               <div 
-                className={`file-upload ${isDragOver ? 'file-upload--drag-over' : ''}`}
+                className={`file-upload ${isDragOver ? 'file-upload--drag-over' : ''} ${!passphrase ? 'file-upload--disabled' : ''}`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -318,7 +336,7 @@ export default function ContentFormModal({
                   type="file"
                   accept="image/jpeg,image/png,image/gif,image/webp"
                   onChange={handleFileChange}
-                  disabled={isUploading}
+                  disabled={isUploading || !passphrase}
                 />
                 <div className="file-upload__icon">
                   {isUploading ? (
@@ -333,30 +351,13 @@ export default function ContentFormModal({
                   )}
                 </div>
                 <div className="file-upload__text">
-                  {isUploading ? 'Uploading...' : 'Drop image here or click to upload'}
+                  {isUploading ? 'Uploading...' : !passphrase ? 'Enter passphrase above to enable upload' : 'Drop image here or click to upload'}
                 </div>
                 <div className="file-upload__hint">
                   JPEG, PNG, GIF, WebP • Max 5MB
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Passphrase */}
-          <div className="form-group">
-            <label htmlFor="passphrase" className="form-label">
-              <span className="form-label__indicator" />
-              Passphrase to Save
-            </label>
-            <input
-              type="password"
-              id="passphrase"
-              value={passphrase}
-              onChange={(e) => setPassphrase(e.target.value)}
-              className="form-input"
-              placeholder="Enter passphrase to save..."
-              required
-            />
           </div>
 
           {error && (

@@ -431,11 +431,25 @@
   box-shadow: 0 0 20px var(--jarvis-cyan-ghost);
 }
 
+.file-upload--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.file-upload--disabled:hover {
+  border-color: var(--border-subtle);
+  background: var(--bg-deep);
+}
+
 .file-upload input[type="file"] {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+.file-upload--disabled input[type="file"] {
+  cursor: not-allowed;
 }
 
 .file-upload__icon {
