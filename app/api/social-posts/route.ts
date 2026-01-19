@@ -10,6 +10,7 @@ export async function GET() {
       .from('social_media_posts')
       .select('*')
       .order('date_added', { ascending: false })
+      .order('created_at', { ascending: false })
 
     if (error) {
       console.error('Supabase error:', error)

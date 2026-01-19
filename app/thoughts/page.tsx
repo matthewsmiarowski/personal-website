@@ -249,7 +249,19 @@ export default function Thoughts() {
         throw new Error('Failed to fetch content')
       }
       const data = await response.json()
-      setWrittenContent(data)
+      // Sort by date_added descending (most recent first), then by created_at as tiebreaker
+      const sorted = [...data].sort((a, b) => {
+        const dateA = new Date(a.date_added).getTime()
+        const dateB = new Date(b.date_added).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA // Descending order (newest first)
+        }
+        // If date_added is the same, use created_at as tiebreaker
+        const createdA = new Date(a.created_at).getTime()
+        const createdB = new Date(b.created_at).getTime()
+        return createdB - createdA // Descending order (newest first)
+      })
+      setWrittenContent(sorted)
       setErrorWritten(null)
     } catch (err) {
       console.error('Error fetching content:', err)
@@ -267,7 +279,19 @@ export default function Thoughts() {
         throw new Error('Failed to fetch social posts')
       }
       const data = await response.json()
-      setSocialPosts(data)
+      // Sort by date_added descending (most recent first), then by created_at as tiebreaker
+      const sorted = [...data].sort((a, b) => {
+        const dateA = new Date(a.date_added).getTime()
+        const dateB = new Date(b.date_added).getTime()
+        if (dateB !== dateA) {
+          return dateB - dateA // Descending order (newest first)
+        }
+        // If date_added is the same, use created_at as tiebreaker
+        const createdA = new Date(a.created_at).getTime()
+        const createdB = new Date(b.created_at).getTime()
+        return createdB - createdA // Descending order (newest first)
+      })
+      setSocialPosts(sorted)
       setErrorSocial(null)
     } catch (err) {
       console.error('Error fetching social posts:', err)
