@@ -38,3 +38,22 @@ export interface SocialMediaPostInput {
   thoughts: string
   date_added: string
 }
+
+// Projects types
+export interface ProjectDB {
+  id: string
+  name: string
+  motivation: string
+  image_url: string
+  link: string
+  date_added: string
+  created_at: string
+}
+
+export interface ProjectInput {
+  name: string
+  motivation: string
+  image_url: string
+  link: string
+  date_added: string
+}
