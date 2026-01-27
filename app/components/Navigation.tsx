@@ -17,8 +17,8 @@ export default function Navigation() {
     }
   }
 
-  const handlePassphraseSubmit = (passphrase: string): boolean => {
-    return enterGodMode(passphrase)
+  const handlePassphraseSubmit = async (passphrase: string): Promise<boolean> => {
+    return await enterGodMode(passphrase)
   }
 
   return (
@@ -53,9 +53,9 @@ export default function Navigation() {
               <span className="nav-link__index">02</span>
               <span className="nav-link__text">Projects</span>
             </Link>
-            
+
             {/* God Mode Toggle */}
-            <button 
+            <button
               className={`god-mode-toggle ${isGodMode ? 'god-mode-toggle--active' : ''}`}
               onClick={handleGodModeClick}
               aria-label={isGodMode ? 'Exit God Mode' : 'Enter God Mode'}

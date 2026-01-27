@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase, ProjectInput } from '@/lib/supabase'
-
-const PASSPHRASE = 'i-love-you-3000'
+import { isAuthenticated } from '@/lib/auth'
 
 // GET - Fetch all projects
 export async function GET() {
@@ -32,19 +31,16 @@ export async function GET() {
 // POST - Create new project
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, project } = body as { 
-      passphrase: string
-      project: ProjectInput 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { project } = body as { project: ProjectInput }
 
     // Validate required fields
     if (!project.name || !project.motivation || !project.link || !project.date_added) {
@@ -81,19 +77,18 @@ export async function POST(request: NextRequest) {
 // PUT - Update existing project
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id, project } = body as { 
-      passphrase: string
-      id: string
-      project: Partial<ProjectInput> 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
+    }
+
+    const body = await request.json()
+    const { id, project } = body as {
+      id: string
+      project: Partial<ProjectInput>
     }
 
     if (!id) {
@@ -131,19 +126,16 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete project
 export async function DELETE(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id } = body as { 
-      passphrase: string
-      id: string 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { id } = body as { id: string }
 
     if (!id) {
       return NextResponse.json(

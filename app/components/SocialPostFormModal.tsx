@@ -20,7 +20,6 @@ export default function SocialPostFormModal({
   const [link, setLink] = useState('')
   const [thoughts, setThoughts] = useState('')
   const [dateAdded, setDateAdded] = useState('')
-  const [passphrase, setPassphrase] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -38,7 +37,6 @@ export default function SocialPostFormModal({
         setThoughts('')
         setDateAdded(new Date().toISOString().split('T')[0])
       }
-      setPassphrase('')
       setError('')
     }
   }, [isOpen, editPost])
@@ -53,7 +51,6 @@ export default function SocialPostFormModal({
       const method = isEditMode ? 'PUT' : 'POST'
       const body = isEditMode
         ? {
-            passphrase,
             id: editPost.id,
             post: {
               link,
@@ -62,7 +59,6 @@ export default function SocialPostFormModal({
             },
           }
         : {
-            passphrase,
             post: {
               link,
               thoughts,
@@ -74,9 +70,15 @@ export default function SocialPostFormModal({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        credentials: 'include',
       })
 
       const data = await response.json()
+
+      if (response.status === 401) {
+        setError('Session expired. Please re-authenticate via God Mode.')
+        return
+      }
 
       if (!response.ok) {
         setError(data.error || 'Failed to save post')
@@ -103,7 +105,7 @@ export default function SocialPostFormModal({
 
   return (
     <div className="modal-overlay" onClick={onClose} onKeyDown={handleKeyDown}>
-      <div 
+      <div
         className="modal-container"
         onClick={(e) => e.stopPropagation()}
       >
@@ -112,7 +114,7 @@ export default function SocialPostFormModal({
         <div className="modal-corner modal-corner--tr modal-corner--amber" />
         <div className="modal-corner modal-corner--bl modal-corner--amber" />
         <div className="modal-corner modal-corner--br modal-corner--amber" />
-        
+
         {/* Header */}
         <div className="modal-header">
           <div className="modal-header__icon modal-header__icon--amber">
@@ -183,23 +185,6 @@ export default function SocialPostFormModal({
             />
           </div>
 
-          {/* Passphrase */}
-          <div className="form-group">
-            <label htmlFor="social-passphrase" className="form-label form-label--amber">
-              <span className="form-label__indicator form-label__indicator--amber" />
-              Passphrase to Save
-            </label>
-            <input
-              type="password"
-              id="social-passphrase"
-              value={passphrase}
-              onChange={(e) => setPassphrase(e.target.value)}
-              className="form-input"
-              placeholder="Enter passphrase to save..."
-              required
-            />
-          </div>
-
           {error && (
             <div className="form-error">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -215,8 +200,8 @@ export default function SocialPostFormModal({
             <button type="button" className="btn-modal btn-modal--secondary" onClick={onClose}>
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={`btn-modal btn-modal--amber ${isLoading ? 'btn-loading' : ''}`}
               disabled={isLoading}
             >

@@ -23,7 +23,6 @@ export default function ProjectFormModal({
   const [link, setLink] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [dateAdded, setDateAdded] = useState('')
-  const [passphrase, setPassphrase] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -48,32 +47,30 @@ export default function ProjectFormModal({
         setImageUrl('')
         setDateAdded(new Date().toISOString().split('T')[0])
       }
-      setPassphrase('')
       setError('')
     }
   }, [isOpen, editProject])
 
   const handleImageUpload = async (file: File) => {
-    // Check if passphrase is entered
-    if (!passphrase) {
-      setError('Please enter the passphrase below before uploading an image')
-      return
-    }
-
     setIsUploading(true)
     setError('')
 
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('passphrase', passphrase)
 
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       })
 
       const data = await response.json()
+
+      if (response.status === 401) {
+        setError('Session expired. Please re-authenticate via God Mode.')
+        return
+      }
 
       if (!response.ok) {
         setError(data.error || 'Failed to upload image')
@@ -132,7 +129,6 @@ export default function ProjectFormModal({
       const method = isEditMode ? 'PUT' : 'POST'
       const body = isEditMode
         ? {
-            passphrase,
             id: editProject.id,
             project: {
               name,
@@ -143,7 +139,6 @@ export default function ProjectFormModal({
             },
           }
         : {
-            passphrase,
             project: {
               name,
               motivation,
@@ -157,9 +152,15 @@ export default function ProjectFormModal({
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        credentials: 'include',
       })
 
       const data = await response.json()
+
+      if (response.status === 401) {
+        setError('Session expired. Please re-authenticate via God Mode.')
+        return
+      }
 
       if (!response.ok) {
         setError(data.error || 'Failed to save project')
@@ -186,7 +187,7 @@ export default function ProjectFormModal({
 
   return (
     <div className="modal-overlay" onClick={onClose} onKeyDown={handleKeyDown}>
-      <div 
+      <div
         className="modal-container modal-container--large"
         onClick={(e) => e.stopPropagation()}
       >
@@ -195,7 +196,7 @@ export default function ProjectFormModal({
         <div className="modal-corner modal-corner--tr" />
         <div className="modal-corner modal-corner--bl" />
         <div className="modal-corner modal-corner--br" />
-        
+
         {/* Header */}
         <div className="modal-header">
           <div className="modal-header__icon">
@@ -284,30 +285,13 @@ export default function ProjectFormModal({
             />
           </div>
 
-          {/* Passphrase - placed before image upload so user enters it first */}
-          <div className="form-group">
-            <label htmlFor="project-passphrase" className="form-label">
-              <span className="form-label__indicator" />
-              Passphrase
-            </label>
-            <input
-              type="password"
-              id="project-passphrase"
-              value={passphrase}
-              onChange={(e) => setPassphrase(e.target.value)}
-              className="form-input"
-              placeholder="Enter passphrase (required for image upload and save)..."
-              required
-            />
-          </div>
-
           {/* Image Upload */}
           <div className="form-group">
             <label className="form-label">
               <span className="form-label__indicator" />
               Screenshot / Image
             </label>
-            
+
             {imageUrl ? (
               <div className="image-preview">
                 <Image
@@ -316,7 +300,7 @@ export default function ProjectFormModal({
                   fill
                   style={{ objectFit: 'cover' }}
                 />
-                <button 
+                <button
                   type="button"
                   className="image-preview__remove"
                   onClick={removeImage}
@@ -328,8 +312,8 @@ export default function ProjectFormModal({
                 </button>
               </div>
             ) : (
-              <div 
-                className={`file-upload ${isDragOver ? 'file-upload--drag-over' : ''} ${!passphrase ? 'file-upload--disabled' : ''}`}
+              <div
+                className={`file-upload ${isDragOver ? 'file-upload--drag-over' : ''}`}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -339,7 +323,7 @@ export default function ProjectFormModal({
                   type="file"
                   accept="image/jpeg,image/png,image/gif,image/webp"
                   onChange={handleFileChange}
-                  disabled={isUploading || !passphrase}
+                  disabled={isUploading}
                 />
                 <div className="file-upload__icon">
                   {isUploading ? (
@@ -354,7 +338,7 @@ export default function ProjectFormModal({
                   )}
                 </div>
                 <div className="file-upload__text">
-                  {isUploading ? 'Uploading...' : !passphrase ? 'Enter passphrase above to enable upload' : 'Drop image here or click to upload'}
+                  {isUploading ? 'Uploading...' : 'Drop image here or click to upload'}
                 </div>
                 <div className="file-upload__hint">
                   JPEG, PNG, GIF, WebP • Max 5MB
@@ -378,8 +362,8 @@ export default function ProjectFormModal({
             <button type="button" className="btn-modal btn-modal--secondary" onClick={onClose}>
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={`btn-modal btn-modal--primary ${isLoading ? 'btn-loading' : ''}`}
               disabled={isLoading}
             >

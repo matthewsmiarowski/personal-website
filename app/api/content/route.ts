@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase, WrittenContentInput } from '@/lib/supabase'
-
-const PASSPHRASE = 'i-love-you-3000'
+import { isAuthenticated } from '@/lib/auth'
 
 // GET - Fetch all written content
 export async function GET() {
@@ -33,19 +32,16 @@ export async function GET() {
 // POST - Create new content
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, content } = body as { 
-      passphrase: string
-      content: WrittenContentInput 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { content } = body as { content: WrittenContentInput }
 
     // Validate required fields
     if (!content.title || !content.summary || !content.link || !content.date_added) {
@@ -82,19 +78,18 @@ export async function POST(request: NextRequest) {
 // PUT - Update existing content
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id, content } = body as { 
-      passphrase: string
-      id: string
-      content: Partial<WrittenContentInput> 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
+    }
+
+    const body = await request.json()
+    const { id, content } = body as {
+      id: string
+      content: Partial<WrittenContentInput>
     }
 
     if (!id) {
@@ -132,19 +127,16 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete content
 export async function DELETE(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id } = body as { 
-      passphrase: string
-      id: string 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { id } = body as { id: string }
 
     if (!id) {
       return NextResponse.json(

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase, SocialMediaPostInput } from '@/lib/supabase'
-
-const PASSPHRASE = 'i-love-you-3000'
+import { isAuthenticated } from '@/lib/auth'
 
 // GET - Fetch all social media posts
 export async function GET() {
@@ -33,19 +32,16 @@ export async function GET() {
 // POST - Create new social media post
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, post } = body as { 
-      passphrase: string
-      post: SocialMediaPostInput 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { post } = body as { post: SocialMediaPostInput }
 
     // Validate required fields
     if (!post.link || !post.thoughts || !post.date_added) {
@@ -82,19 +78,18 @@ export async function POST(request: NextRequest) {
 // PUT - Update existing social media post
 export async function PUT(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id, post } = body as { 
-      passphrase: string
-      id: string
-      post: Partial<SocialMediaPostInput> 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
+    }
+
+    const body = await request.json()
+    const { id, post } = body as {
+      id: string
+      post: Partial<SocialMediaPostInput>
     }
 
     if (!id) {
@@ -132,19 +127,16 @@ export async function PUT(request: NextRequest) {
 // DELETE - Delete social media post
 export async function DELETE(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, id } = body as { 
-      passphrase: string
-      id: string 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { id } = body as { id: string }
 
     if (!id) {
       return NextResponse.json(

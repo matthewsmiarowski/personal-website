@@ -6,7 +6,7 @@ import './modals.css'
 interface PassphraseModalProps {
   isOpen: boolean
   onClose: () => void
-  onSubmit: (passphrase: string) => boolean
+  onSubmit: (passphrase: string) => Promise<boolean>
   title?: string
   submitLabel?: string
 }
@@ -21,6 +21,7 @@ export default function PassphraseModal({
   const [passphrase, setPassphrase] = useState('')
   const [error, setError] = useState('')
   const [isShaking, setIsShaking] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -32,16 +33,26 @@ export default function PassphraseModal({
     }
   }, [isOpen])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const success = onSubmit(passphrase)
-    if (success) {
-      onClose()
-    } else {
-      setError("I'm sorry, that's not the right passphrase")
-      setIsShaking(true)
-      setTimeout(() => setIsShaking(false), 500)
-      setPassphrase('')
+    setIsLoading(true)
+    setError('')
+
+    try {
+      const success = await onSubmit(passphrase)
+      if (success) {
+        onClose()
+      } else {
+        setError("I'm sorry, that's not the right passphrase")
+        setIsShaking(true)
+        setTimeout(() => setIsShaking(false), 500)
+        setPassphrase('')
+      }
+    } catch (err) {
+      setError('Authentication failed')
+      console.error('Auth error:', err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -55,7 +66,7 @@ export default function PassphraseModal({
 
   return (
     <div className="modal-overlay" onClick={onClose} onKeyDown={handleKeyDown}>
-      <div 
+      <div
         className={`modal-container ${isShaking ? 'modal-shake' : ''}`}
         onClick={(e) => e.stopPropagation()}
       >
@@ -64,7 +75,7 @@ export default function PassphraseModal({
         <div className="modal-corner modal-corner--tr" />
         <div className="modal-corner modal-corner--bl" />
         <div className="modal-corner modal-corner--br" />
-        
+
         {/* Header */}
         <div className="modal-header">
           <div className="modal-header__icon">
@@ -98,6 +109,7 @@ export default function PassphraseModal({
               className="form-input"
               placeholder="Enter authentication code..."
               autoComplete="off"
+              disabled={isLoading}
             />
           </div>
 
@@ -116,7 +128,11 @@ export default function PassphraseModal({
             <button type="button" className="btn-modal btn-modal--secondary" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn-modal btn-modal--primary">
+            <button
+              type="submit"
+              className={`btn-modal btn-modal--primary ${isLoading ? 'btn-loading' : ''}`}
+              disabled={isLoading}
+            >
               <span>{submitLabel}</span>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

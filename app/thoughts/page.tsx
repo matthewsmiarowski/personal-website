@@ -315,22 +315,20 @@ export default function Thoughts() {
     setDeleteContent(content)
   }
 
-  const confirmDeleteContent = async (passphrase: string): Promise<boolean> => {
+  const confirmDeleteContent = async (): Promise<boolean> => {
     if (!deleteContent) return false
 
     try {
       const response = await fetch('/api/content', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          passphrase,
-          id: deleteContent.id,
-        }),
+        body: JSON.stringify({ id: deleteContent.id }),
+        credentials: 'include',
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          return false // Wrong passphrase
+          return false // Session expired
         }
         throw new Error('Failed to delete')
       }
@@ -352,22 +350,20 @@ export default function Thoughts() {
     setDeleteSocialPost(post)
   }
 
-  const confirmDeleteSocialPost = async (passphrase: string): Promise<boolean> => {
+  const confirmDeleteSocialPost = async (): Promise<boolean> => {
     if (!deleteSocialPost) return false
 
     try {
       const response = await fetch('/api/social-posts', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          passphrase,
-          id: deleteSocialPost.id,
-        }),
+        body: JSON.stringify({ id: deleteSocialPost.id }),
+        credentials: 'include',
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          return false // Wrong passphrase
+          return false // Session expired
         }
         throw new Error('Failed to delete')
       }

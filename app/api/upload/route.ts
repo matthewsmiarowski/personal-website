@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-
-const PASSPHRASE = 'i-love-you-3000'
+import { isAuthenticated } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File | null
-    const passphrase = formData.get('passphrase') as string | null
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const formData = await request.formData()
+    const file = formData.get('file') as File | null
 
     if (!file) {
       return NextResponse.json(
@@ -73,9 +71,9 @@ export async function POST(request: NextRequest) {
       .from('images')
       .getPublicUrl(data.path)
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       url: publicUrl,
-      path: data.path 
+      path: data.path
     })
   } catch (error) {
     console.error('Error uploading file:', error)
@@ -89,19 +87,16 @@ export async function POST(request: NextRequest) {
 // DELETE - Remove an uploaded image
 export async function DELETE(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { passphrase, path } = body as { 
-      passphrase: string
-      path: string 
-    }
-
-    // Validate passphrase
-    if (passphrase !== PASSPHRASE) {
+    // Check authentication
+    if (!(await isAuthenticated())) {
       return NextResponse.json(
-        { error: "I'm sorry, that's not the right passphrase" },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
     }
+
+    const body = await request.json()
+    const { path } = body as { path: string }
 
     if (!path) {
       return NextResponse.json(

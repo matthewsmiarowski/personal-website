@@ -6,7 +6,7 @@ import './modals.css'
 interface DeleteConfirmModalProps {
   isOpen: boolean
   onClose: () => void
-  onConfirm: (passphrase: string) => Promise<boolean>
+  onConfirm: () => Promise<boolean>
   title: string
 }
 
@@ -16,7 +16,6 @@ export default function DeleteConfirmModal({
   onConfirm,
   title
 }: DeleteConfirmModalProps) {
-  const [passphrase, setPassphrase] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -26,12 +25,11 @@ export default function DeleteConfirmModal({
     setIsLoading(true)
 
     try {
-      const success = await onConfirm(passphrase)
+      const success = await onConfirm()
       if (success) {
-        setPassphrase('')
         onClose()
       } else {
-        setError("I'm sorry, that's not the right passphrase")
+        setError('Session expired. Please re-authenticate via God Mode.')
       }
     } catch (err) {
       setError('Failed to delete content')
@@ -42,7 +40,6 @@ export default function DeleteConfirmModal({
   }
 
   const handleClose = () => {
-    setPassphrase('')
     setError('')
     onClose()
   }
@@ -57,7 +54,7 @@ export default function DeleteConfirmModal({
 
   return (
     <div className="modal-overlay" onClick={handleClose} onKeyDown={handleKeyDown}>
-      <div 
+      <div
         className="modal-container"
         onClick={(e) => e.stopPropagation()}
       >
@@ -66,7 +63,7 @@ export default function DeleteConfirmModal({
         <div className="modal-corner modal-corner--tr" />
         <div className="modal-corner modal-corner--bl" />
         <div className="modal-corner modal-corner--br" />
-        
+
         {/* Header */}
         <div className="modal-header">
           <div className="modal-header__icon" style={{ color: 'var(--jarvis-red)' }}>
@@ -100,24 +97,6 @@ export default function DeleteConfirmModal({
             </p>
           </div>
 
-          {/* Passphrase */}
-          <div className="form-group">
-            <label htmlFor="delete-passphrase" className="form-label">
-              <span className="form-label__indicator" />
-              Enter Passphrase to Confirm
-            </label>
-            <input
-              type="password"
-              id="delete-passphrase"
-              value={passphrase}
-              onChange={(e) => setPassphrase(e.target.value)}
-              className="form-input"
-              placeholder="Enter passphrase..."
-              required
-              autoFocus
-            />
-          </div>
-
           {error && (
             <div className="form-error">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -133,8 +112,8 @@ export default function DeleteConfirmModal({
             <button type="button" className="btn-modal btn-modal--secondary" onClick={handleClose}>
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={`btn-modal btn-modal--danger ${isLoading ? 'btn-loading' : ''}`}
               disabled={isLoading}
             >

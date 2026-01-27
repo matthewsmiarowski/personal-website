@@ -165,22 +165,20 @@ export default function Projects() {
     setDeleteProject(project)
   }
 
-  const confirmDeleteProject = async (passphrase: string): Promise<boolean> => {
+  const confirmDeleteProject = async (): Promise<boolean> => {
     if (!deleteProject) return false
 
     try {
       const response = await fetch('/api/projects', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          passphrase,
-          id: deleteProject.id,
-        }),
+        body: JSON.stringify({ id: deleteProject.id }),
+        credentials: 'include',
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          return false // Wrong passphrase
+          return false // Session expired
         }
         throw new Error('Failed to delete')
       }
