@@ -29,7 +29,7 @@ export default function DeleteConfirmModal({
       if (success) {
         onClose()
       } else {
-        setError('Session expired. Please re-authenticate via God Mode.')
+        setError('Session expired. Please re-authenticate via Jarvis Mode.')
       }
     } catch (err) {
       setError('Failed to delete content')

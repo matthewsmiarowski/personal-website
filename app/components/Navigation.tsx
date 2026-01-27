@@ -38,7 +38,7 @@ export default function Navigation() {
               <span className="identity__name">Matt Smiarowski</span>
               <span className="identity__status">
                 <span className={`status-dot ${isGodMode ? 'status-dot--amber' : ''}`} />
-                {isGodMode ? 'God Mode Active' : 'System Online'}
+                {isGodMode ? 'Jarvis Mode Active' : 'System Online'}
               </span>
             </div>
           </Link>
@@ -58,7 +58,7 @@ export default function Navigation() {
             <button
               className={`god-mode-toggle ${isGodMode ? 'god-mode-toggle--active' : ''}`}
               onClick={handleGodModeClick}
-              aria-label={isGodMode ? 'Exit God Mode' : 'Enter God Mode'}
+              aria-label={isGodMode ? 'Exit Jarvis Mode' : 'Enter Jarvis Mode'}
             >
               <span className="god-mode-toggle__icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +68,7 @@ export default function Navigation() {
                 </svg>
               </span>
               <span className="god-mode-toggle__text">
-                {isGodMode ? 'Exit God Mode' : 'God Mode'}
+                {isGodMode ? 'Exit Jarvis Mode' : 'Jarvis Mode'}
               </span>
             </button>
           </nav>
@@ -80,7 +80,7 @@ export default function Navigation() {
         isOpen={showPassphraseModal}
         onClose={() => setShowPassphraseModal(false)}
         onSubmit={handlePassphraseSubmit}
-        title="Enter God Mode"
+        title="Enter Jarvis Mode"
         submitLabel="Activate"
       />
     </>

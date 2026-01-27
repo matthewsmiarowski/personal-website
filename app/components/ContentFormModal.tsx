@@ -68,7 +68,7 @@ export default function ContentFormModal({
       const data = await response.json()
 
       if (response.status === 401) {
-        setError('Session expired. Please re-authenticate via God Mode.')
+        setError('Session expired. Please re-authenticate via Jarvis Mode.')
         return
       }
 
@@ -158,7 +158,7 @@ export default function ContentFormModal({
       const data = await response.json()
 
       if (response.status === 401) {
-        setError('Session expired. Please re-authenticate via God Mode.')
+        setError('Session expired. Please re-authenticate via Jarvis Mode.')
         return
       }
 
